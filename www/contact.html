@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Koperasi UWP</title>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" href="/www/img/uwp-logo.png">
+   <link href="/www/css/font.css" rel="stylesheet">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+   <link href="lib/animate/animate.min.css" rel="stylesheet">
+   <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+   <link href="css/style.css" rel="stylesheet">
+   <script>
+      function includeHTML() {
+         var z, i, elmnt, file, xhttp;
+         z = document.getElementsByTagName("*");
+         for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            file = elmnt.getAttribute("w3-include-html");
+            if (file) {
+               xhttp = new XMLHttpRequest();
+               xhttp.onreadystatechange = function () {
+                  if (this.readyState == 4) {
+                     if (this.status == 200) { elmnt.innerHTML = this.responseText; }
+                     if (this.status == 404) { elmnt.innerHTML = "Page not found."; }
+                     elmnt.removeAttribute("w3-include-html");
+                     includeHTML();
+                  }
+               }
+               xhttp.open("GET", file, true);
+               xhttp.send();
+               return;
+            }
+         }
+      };
+   </script>
+</head>
+<body>
+   <div w3-include-html="navbar.html"></div>
+   <main class="wrapper">
+    <div class="container-fluid">
+       <div class="row px-xl-5">
+           <div class="col-12">
+               <nav class="breadcrumb bg-light mb-30">
+                   <a class="breadcrumb-item text-dark" href="dashboard.html">Home</a>
+                   <span class="breadcrumb-item active">Contact</span>
+               </nav>
+           </div>
+       </div>
+    </div>
+    <div class="container-fluid">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Contact Us</span></h2>
+        <div class="row px-xl-5">
+            <div class="col-lg-7 mb-5">
+                <div class="contact-form bg-light p-30">
+                    <div id="success"></div>
+                    <form name="sentMessage" id="contactForm" novalidate="novalidate">
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="name" placeholder="Your Name"
+                                required="required" data-validation-required-message="Please enter your name" />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <input type="email" class="form-control" id="email" placeholder="Your Email"
+                                required="required" data-validation-required-message="Please enter your email" />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="subject" placeholder="Subject"
+                                required="required" data-validation-required-message="Please enter a subject" />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <textarea class="form-control" rows="8" id="message" placeholder="Message"
+                                required="required"
+                                data-validation-required-message="Please enter your message"></textarea>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
+                                Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-5 mb-5">
+                <div class="bg-light p-30 mb-30">
+                    <iframe style="width: 100%; height: 250px;"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1664.1231539118623!2d112.63204335528572!3d-7.2437765745225375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb830dc32397%3A0x9888f1b30a2257c9!2sUniversitas%20Wijaya%20Putra%20-%20Kampus%20Benowo!5e0!3m2!1sid!2sid!4v1671859548560!5m2!1sid!2sid"
+                    frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                </div>
+                <div class="bg-light p-30 mb-3">
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Jl. Pd. Benowo Indah No.1-3, Kota SBY, Jawa Timur 60197</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>koperasi_uwp@gmail.com</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>031-7404404</p>
+                </div>
+            </div>
+        </div>
+    </div>
+   <div w3-include-html="footer.html"></div>
+   </main>
+   <script src="/ui/jquery-3.6.1/jquery-3.6.1.min.js"></script>
+   <script src="lib/easing/easing.min.js"></script>
+   <script src="/ui/bootstrap-5.2.1-dist/js/bootstrap.bundle.min.js"></script>
+   <script src="js/main.js"></script>
+   <script>
+      includeHTML();
+   </script>
+   <script>
+      $(document).on("scroll", function () {
+         if ($(document).scrollTop() > 100) {
+            $(".navbar").addClass("border-bottom");
+         } else {
+            $(".navbar").removeClass("border-bottom");
+         }
+      });
+      $('input').hover(function () {
+         $(this).select();
+      });
+   </script>
+   <script>
+      [].forEach.call(document.querySelectorAll("*"), function (a) {
+      });
+   </script>
+ 
+</body>
+ 
+</html>
