@@ -83,10 +83,10 @@
       });
       window.onload = (event) => {
          console.log("page is fully loaded");
-         getnews();
+         getproduct();
       };
 
-      function getnews() {
+      function getproduct() {
          axios({
             method: 'get',
             url: `http://127.0.0.1:8000/api/getproduct`,
@@ -97,7 +97,7 @@
                var text = "";
                text += "<table class='table table-bordered'>";
                text += "<tr>";
-               text += "<th>ID</th>";
+               text += "<th>No</th>";
                text += "<th>ID Category</th>";
                text += "<th>Product</th>";
                text += "<th>Description</th>";
@@ -105,11 +105,12 @@
                text += "<th>Price</th>";
                text += "<th>Stock</th>";
                text += "<th>Status</th>";
+               text += "<th>Action</th>";
                text += "</tr>";
                if (response.data.length > 0) {
                   for (var i = 0; i < response.data.length; i++) {
                      text += "<tr>";
-                     text += "<td>" + response.data[i].id + "</td>";
+                     text += "<td>" + response.data[i].id+ "</td>";
                      text += "<td>" + response.data[i].id_category + "</td>";
                      text += "<td>" + response.data[i].product + "</td>";
                      text += "<td>" + response.data[i].description + "</td>";
@@ -117,6 +118,7 @@
                      text += "<td>" + response.data[i].price + "</td>";
                      text += "<td>" + response.data[i].stock + "</td>";
                      text += "<td>" + response.data[i].status + "</td>";
+                     text += '"<td><button class="btn btn-info btn-edit" data="'+response.data[i].id+'" data-toggle="modal" data-target="#Modaledit">edit</button> <button class="btn btn-danger btn-hapus" data="'+response.data[i].id+'">hapus</button></td>"';
                      text += "</tr>";
                   }
                }
