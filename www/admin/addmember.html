@@ -42,16 +42,57 @@
       <section>
          <div class="container-fluid px-md-4">
             <header class="mb-5">
-               <h3 class="title-pages fw-bold">Voucher</h3>
+               <h3 class="title-pages fw-bold">Member</h3>
             </header>
             <div class="row">
-               <div class="col-12 mb-3">
-                  <a href="addvoucher.html" class="btn btn-primary">Add Voucher</a>
+               <div class="col-12">
+                  <div class="form-group">
+                     <label for="id_category">Name</label>
+                     <input type="text" class="form-control" name="name" id="name"
+                        value="">
+                     <div class="invalid-feedback">
+
+                     </div>
+                  </div>
+
+                  <div class="form-group">
+                     <label for="product">Address</label>
+                     <input type="text" class="form-control" name="address" id="address" value="">
+                     <div class="invalid-feedback">
+                  </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                     <label for="description">Telp</label>
+                     <textarea name="telp" id="telp" class="form-control" rows="5"></textarea>
+                     <div class="invalid-feedback">
+                     </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                     <label for="description">Email</label>
+                     <textarea name="email" id="email" class="form-control" rows="5"></textarea>
+                     <div class="invalid-feedback">
+                     </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                     <label for="description">Status</label>
+                     <textarea name="status" id="status" class="form-control" rows="5"></textarea>
+                     <div class="invalid-feedback">
+                     </div>
+                  </div>
+
+                  <a href="member.html" class="btn btn-md btn-primary">Cancel</a>
+                  <button type="submit" class="btn btn-md btn-primary" onclick="postmemberapi()">Save</button>
+                  <div id="message">
+                  </div>
+
                </div>
-               <div id="dataku">loading ...</div>
             </div>
          </div>
       </section>
+
       <div w3-include-html="footer.html"></div>
    </main>
    <div w3-include-html="navdown.html"></div>
@@ -78,67 +119,31 @@
    </script>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <script>
-      $(document).ready(function () {
-         console.log("ready!");
-      });
-      window.onload = (event) => {
-         console.log("page is fully loaded");
-         getvoucher();
-      };
-
-      function getvoucher() {
-         
+      function postmemberapi() {
+         alert("simpan member");
+         var bodyFormData = new FormData();
+         bodyFormData.append('name', document.getElementById('name').value)
+         bodyFormData.append('address', document.getElementById('address').value)
+         bodyFormData.append('telp', document.getElementById('telp').value)
+         bodyFormData.append('email', document.getElementById('email').value)
+         bodyFormData.append('status', document.getElementById('status').value)
          axios({
-            method: 'get',
-            url: `http://127.0.0.1:8000/api/getvoucher`,
+            method: 'post',
+            url: `http://127.0.0.1:8000/api/postmember`,
+            data: bodyFormData,
+
          })
             .then(response => {
-               this.post = response.data;
-               console.log(this.post);
-               // console.log(response.data);
-               console.log(response.data.length);
-               var text = "";
-               text += "<table class='table table-bordered'>";
-               text += "<tr>";
-               text += "<th>No</th>";
-               text += "<th>Nama Voucher</th>";
-               text += "<th>Value</th>";
-               text += "<th>Status</th>";
-               text += "<th>Action</th>";
-               text += "</tr>";
-               if (response.data.length > 0) {
-                  for (var i = 0; i < response.data.length; i++) {
-                     text += "<tr>";
-                     text += "<td>" + response.data[i].id+ "</td>";
-                     text += "<td>" + response.data[i].voucher_name + "</td>";
-                     text += "<td>" + response.data[i].value + "</td>";
-                     text += "<td>" + response.data[i].status + "</td>";
-                     text += '<td><button class="btn btn-info btn-edit" data='+response.data[i].id+' data-toggle="modal" data-target="#Modaledit">edit</button> <button class="btn btn-danger btn-hapus" onclick="delproduct()" data='+response.data[i].id+'>hapus</button></td>';
-                     text += "</tr>";
-                  }
-               }
-               text += "</table>";
-               document.getElementById("dataku").innerHTML = text;
+
+               document.getElementById("message").innerHTML = response.data.status;
             })
             .catch(function (err) {
                console.log(err);
             });
       }
-      function delproduct(post, i) {            
-         console.log(post.id);
-         // axios({
-         //    method: 'delete',
-         //    url: `http://127.0.0.1:8000/api/delproduct`,
-         // })
-         //    .then(response => {
-         //       console.log(post);        
-         //       console.log(post.id);
-         //    })
-         //    .catch(function (err) {
-         //       console.log(err);
-         //    });
-      }
+
    </script>
+
 </body>
 
 </html>
