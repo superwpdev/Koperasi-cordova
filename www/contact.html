@@ -159,8 +159,7 @@
                             <p class="help-block text-danger"></p>
                         </div>
                         <div>
-                            <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
-                                Message</button>
+                            <button type="submit" class="btn btn-primary py-2 px-4" onclick="postcontact()">Send Message</button>
                         </div>
                     </form>
                 </div>
@@ -203,6 +202,31 @@
    <script>
       [].forEach.call(document.querySelectorAll("*"), function (a) {
       });
+   </script>
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script>
+      function postcontact() {
+         alert("simpan contact");
+         var bodyFormData = new FormData();
+         bodyFormData.append('name', document.getElementById('name').value)
+         bodyFormData.append('email', document.getElementById('email').value)
+         bodyFormData.append('subject', document.getElementById('subject').value)
+         bodyFormData.append('message', document.getElementById('message').value)
+         axios({
+            method: 'post',
+            url: `http://127.0.0.1:8000/api/postcontact`,
+            data: bodyFormData,
+
+         })
+            .then(response => {
+
+               document.getElementById("message").innerHTML = response.data.status;
+            })
+            .catch(function (err) {
+               console.log(err);
+            });
+      }
+
    </script>
  
 </body>

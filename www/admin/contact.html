@@ -42,12 +42,9 @@
       <section>
          <div class="container-fluid px-md-4">
             <header class="mb-5">
-               <h3 class="title-pages fw-bold">Product</h3>
+               <h3 class="title-pages fw-bold">Kritik & Saran</h3>
             </header>
             <div class="row">
-               <div class="col-12 mb-3">
-                  <a href="addproduct.html" class="btn btn-primary">Add Product</a>
-               </div>
                <div id="dataku">loading ...</div>
             </div>
          </div>
@@ -83,14 +80,14 @@
       });
       window.onload = (event) => {
          console.log("page is fully loaded");
-         getproduct();
+         getcontact();
       };
 
-      function getproduct() {
+      function getcontact() {
          
          axios({
             method: 'get',
-            url: `http://127.0.0.1:8000/api/getproduct`,
+            url: `http://127.0.0.1:8000/api/getcontact`,
          })
             .then(response => {
                this.post = response.data;
@@ -100,28 +97,18 @@
                var text = "";
                text += "<table class='table table-bordered'>";
                text += "<tr>";
-               text += "<th>No</th>";
-               text += "<th>ID Category</th>";
-               text += "<th>Product</th>";
-               text += "<th>Description</th>";
-               text += "<th>Image</th>";
-               text += "<th>Price</th>";
-               text += "<th>Stock</th>";
-               text += "<th>Status</th>";
-               text += "<th>Action</th>";
+               text += "<th>Nama</th>";
+               text += "<th>Email</th>";
+               text += "<th>Subject</th>";
+               text += "<th>Message</th>";
                text += "</tr>";
                if (response.data.length > 0) {
                   for (var i = 0; i < response.data.length; i++) {
                      text += "<tr>";
-                     text += "<td>" + response.data[i].id+ "</td>";
-                     text += "<td>" + response.data[i].id_category + "</td>";
-                     text += "<td>" + response.data[i].product + "</td>";
-                     text += "<td>" + response.data[i].description + "</td>";
-                     text += "<td>" + response.data[i].image + "</td>";
-                     text += "<td>" + response.data[i].price + "</td>";
-                     text += "<td>" + response.data[i].stock + "</td>";
-                     text += "<td>" + response.data[i].status + "</td>";
-                     text += '<td><button class="btn btn-info btn-edit" data='+response.data[i].id+' data-toggle="modal" data-target="#Modaledit">edit</button> <button class="btn btn-danger btn-hapus" onclick="delproduct()" data='+response.data[i].id+'>hapus</button></td>';
+                     text += "<td>" + response.data[i].name + "</td>";
+                     text += "<td>" + response.data[i].email + "</td>";
+                     text += "<td>" + response.data[i].subject + "</td>";
+                     text += "<td>" + response.data[i].message + "</td>";
                      text += "</tr>";
                   }
                }
@@ -131,20 +118,6 @@
             .catch(function (err) {
                console.log(err);
             });
-      }
-      function delproduct(post, i) {            
-         console.log(post.id);
-         // axios({
-         //    method: 'delete',
-         //    url: `http://127.0.0.1:8000/api/delproduct`,
-         // })
-         //    .then(response => {
-         //       console.log(post);        
-         //       console.log(post.id);
-         //    })
-         //    .catch(function (err) {
-         //       console.log(err);
-         //    });
       }
    </script>
 </body>
