@@ -218,9 +218,9 @@
             data: bodyFormData,
 
          })
-            .then(response => {
-
-               document.getElementById("message").innerHTML = response.data.status;
+            .then(response => {                
+                alert("Terima Kasih Kritik & Sarannya");
+                document.getElementById("message").innerHTML = response.data.status;
             })
             .catch(function (err) {
                console.log(err);
