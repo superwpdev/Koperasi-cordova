@@ -146,7 +146,7 @@
          var price = document.getElementById("edit-price").value;
          var stock = document.getElementById("edit-stock").value;
          var status = document.getElementById("edit-status").value;
-         console.log(id,id_category,address,description,image,price,stock,status);
+         console.log(id,id_category,product,description,image,price,stock,status);
          axios({
             method: 'post',
             url: `http://127.0.0.1:8000/api/updateproduct`,

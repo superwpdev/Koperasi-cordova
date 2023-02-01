@@ -126,12 +126,12 @@
          var voucher_name = document.getElementById("edit-voucher_name").value;
          var value = document.getElementById("edit-value").value;
          var status = document.getElementById("edit-status").value;
-         console.log(id,voucher_name,status);
+         console.log(id,voucher_name,value,status);
          axios({
             method: 'post',
             url: `http://127.0.0.1:8000/api/updatevoucher`,
             data: {
-               id,voucher_name,status
+               id,voucher_name,value,status
             }            
          })
          .then(response => {
