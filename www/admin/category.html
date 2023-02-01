@@ -53,6 +53,27 @@
          </div>
       </section>
       <div w3-include-html="footer.html"></div>
+      <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Category</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                  <input type="hidden" id="edit-id"> </input>
+                  <label>Category : </label>
+                  <input class="form-control" type="text" id="edit-category"></input>
+                  <label>Status : </label>
+                  <input class="form-control" type="text" id="edit-status"></input>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="updateCategory()">Save changes</button>
+               </div>
+            </div>
+         </div>
+      </div>
    </main>
    <div w3-include-html="navdown.html"></div>
    <script src="/ui/jquery-3.6.1/jquery-3.6.1.min.js"></script>
@@ -86,6 +107,55 @@
          getcategory();
       };
 
+      function editCategory(data){
+         var id = data.id;
+         var category = data.category;
+         var status = data.status;
+         console.log(id,category,status);
+         document.getElementById("edit-id").value = id;
+         document.getElementById("edit-category").value = category;
+         document.getElementById("edit-status").value = status;
+         
+      }
+
+
+      function updateCategory(){
+         var id = document.getElementById("edit-id").value;
+         var category = document.getElementById("edit-category").value;
+         var status = document.getElementById("edit-status").value;
+         console.log(id,category,status);
+         axios({
+            method: 'post',
+            url: `http://127.0.0.1:8000/api/updateproductcategory`,
+            data: {
+               id,category,status
+            }            
+         })
+         .then(response => {
+               console.log(response);
+               getcategory();
+         })
+         
+
+      }
+
+      function deleteCategory(id){
+         console.log(id);
+         axios({
+            method: 'delete',
+            url: `http://127.0.0.1:8000/api/delproductcat/${id}`,
+         })
+            .then(response => {
+               console.log(response);
+               getcategory();
+               // document.getElementById("message").innerHTML = response.data.status;
+            })
+            .catch(function (err) {
+               console.log(err);
+            });  
+
+      }
+
       function getcategory() {
          
          axios({
@@ -93,14 +163,14 @@
             url: `http://127.0.0.1:8000/api/getproductcategory`,
          })
             .then(response => {
-               this.post = response.data;
-               console.log(this.post);
-               // console.log(response.data);
+               console.log(response.data);
                console.log(response.data.length);
+               var no = 1;
                var text = "";
                text += "<table class='table table-bordered'>";
                text += "<tr>";
-               text += "<th>No</th>";
+               text += "<th>No</th>";   
+               text += "<th>Id Category</th>";
                text += "<th>Category</th>";
                text += "<th>Status</th>";
                text += "<th>Action</th>";
@@ -108,10 +178,11 @@
                if (response.data.length > 0) {
                   for (var i = 0; i < response.data.length; i++) {
                      text += "<tr>";
-                     text += "<td>" + response.data[i].id+ "</td>";
+                     text += "<td>" + no++ + "</td>";
+                     text += "<td>" + response.data[i].id + "</td>";
                      text += "<td>" + response.data[i].category + "</td>";
                      text += "<td>" + response.data[i].status + "</td>";
-                     text += '<td><button class="btn btn-info btn-edit" data='+response.data[i].id+' data-toggle="modal" data-target="#Modaledit">edit</button> <button class="btn btn-danger btn-hapus" onclick="delproduct()" data='+response.data[i].id+'>hapus</button></td>';
+                     text += "<td><button data-bs-toggle='modal' data-bs-target='#editmodal' onclick='editCategory("+JSON.stringify(response.data[i])+")' class='btn btn-info btn-edit'>Edit</button>  <a button type='submit' class='btn btn-danger btn-hapus' onclick='deleteCategory("+response.data[i].id+")'>Delete</button></td>";
                      text += "</tr>";
                   }
                }
@@ -121,20 +192,6 @@
             .catch(function (err) {
                console.log(err);
             });
-      }
-      function delproduct(post, i) {            
-         console.log(post.id);
-         // axios({
-         //    method: 'delete',
-         //    url: `http://127.0.0.1:8000/api/delproduct`,
-         // })
-         //    .then(response => {
-         //       console.log(post);        
-         //       console.log(post.id);
-         //    })
-         //    .catch(function (err) {
-         //       console.log(err);
-         //    });
       }
    </script>
 </body>

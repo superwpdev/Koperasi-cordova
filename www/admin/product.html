@@ -53,6 +53,37 @@
          </div>
       </section>
       <div w3-include-html="footer.html"></div>
+      <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Product</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                  <input type="hidden" id="edit-id"> </input>
+                  <label>Id Category : </label>
+                  <input class="form-control" type="text" id="edit-id_category"></input>
+                  <label>Product : </label>
+                  <input class="form-control" type="text" id="edit-product"></input>
+                  <label>Description : </label>
+                  <input class="form-control" type="text" id="edit-description"></input>
+                  <label>Image : </label>
+                  <input class="form-control" type="text" id="edit-image"></input>
+                  <label>Price : </label>
+                  <input class="form-control" type="text" id="edit-price"></input>
+                  <label>Stock : </label>
+                  <input class="form-control" type="text" id="edit-stock"></input>
+                  <label>Status : </label>
+                  <input class="form-control" type="text" id="edit-status"></input>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="updateProduct()">Save changes</button>
+               </div>
+            </div>
+         </div>
+      </div>
    </main>
    <div w3-include-html="navdown.html"></div>
    <script src="/ui/jquery-3.6.1/jquery-3.6.1.min.js"></script>
@@ -84,10 +115,68 @@
       window.onload = (event) => {
          console.log("page is fully loaded");
          getproduct();
-      };
+      };      
+      
+      function editProduct(data){
+         var id = data.id;
+         var id_category = data.id_category;
+         var product = data.product;
+         var description = data.description;
+         var image = data.image;
+         var price = data.price;
+         var stock = data.stock;
+         var status = data.status;
+         console.log(id,id_category,product,description,image,price,stock,status);
+         document.getElementById("edit-id").value = id;
+         document.getElementById("edit-id_category").value = id_category;
+         document.getElementById("edit-product").value = product;
+         document.getElementById("edit-description").value = description;
+         document.getElementById("edit-image").value = image;
+         document.getElementById("edit-price").value = price;
+         document.getElementById("edit-stock").value = stock;
+         document.getElementById("edit-status").value = status;     
+      }
 
-      function getproduct() {
-         
+      function updateProduct(){
+         var id = document.getElementById("edit-id").value;
+         var id_category = document.getElementById("edit-id_category").value;
+         var product = document.getElementById("edit-product").value;
+         var description = document.getElementById("edit-description").value;
+         var image = document.getElementById("edit-image").value;
+         var price = document.getElementById("edit-price").value;
+         var stock = document.getElementById("edit-stock").value;
+         var status = document.getElementById("edit-status").value;
+         console.log(id,id_category,address,description,image,price,stock,status);
+         axios({
+            method: 'post',
+            url: `http://127.0.0.1:8000/api/updateproduct`,
+            data: {
+               id,id_category,product,description,image,price,stock,status
+            }            
+         })
+         .then(response => {
+               console.log(response);
+               getproduct();
+         })       
+      }
+
+      function deleteProduct(id){
+         console.log(id);
+         axios({
+            method: 'delete',
+            url: `http://127.0.0.1:8000/api/delproduct/${id}`,
+         })
+            .then(response => {
+               console.log(response);
+               getproduct();
+               // document.getElementById("message").innerHTML = response.data.status;
+            })
+            .catch(function (err) {
+               console.log(err);
+            });  
+      }
+
+      function getproduct() {         
          axios({
             method: 'get',
             url: `http://127.0.0.1:8000/api/getproduct`,
@@ -97,10 +186,12 @@
                console.log(this.post);
                // console.log(response.data);
                console.log(response.data.length);
+               var no = 1;
                var text = "";
                text += "<table class='table table-bordered'>";
                text += "<tr>";
                text += "<th>No</th>";
+               text += "<th>ID Product</th>";
                text += "<th>ID Category</th>";
                text += "<th>Product</th>";
                text += "<th>Description</th>";
@@ -113,6 +204,7 @@
                if (response.data.length > 0) {
                   for (var i = 0; i < response.data.length; i++) {
                      text += "<tr>";
+                     text += "<td>" + no++ + "</td>";
                      text += "<td>" + response.data[i].id+ "</td>";
                      text += "<td>" + response.data[i].id_category + "</td>";
                      text += "<td>" + response.data[i].product + "</td>";
@@ -121,7 +213,7 @@
                      text += "<td>" + response.data[i].price + "</td>";
                      text += "<td>" + response.data[i].stock + "</td>";
                      text += "<td>" + response.data[i].status + "</td>";
-                     text += '<td><button class="btn btn-info btn-edit" data='+response.data[i].id+' data-toggle="modal" data-target="#Modaledit">edit</button> <button class="btn btn-danger btn-hapus" onclick="delproduct()" data='+response.data[i].id+'>hapus</button></td>';
+                     text += "<td><button data-bs-toggle='modal' data-bs-target='#editmodal' onclick='editProduct("+JSON.stringify(response.data[i])+")' class='btn btn-info btn-edit'>Edit</button>  <a button type='submit' class='btn btn-danger btn-hapus' onclick='deleteProduct("+response.data[i].id+")'>Delete</button></td>";
                      text += "</tr>";
                   }
                }
@@ -131,20 +223,6 @@
             .catch(function (err) {
                console.log(err);
             });
-      }
-      function delproduct(post, i) {            
-         console.log(post.id);
-         // axios({
-         //    method: 'delete',
-         //    url: `http://127.0.0.1:8000/api/delproduct`,
-         // })
-         //    .then(response => {
-         //       console.log(post);        
-         //       console.log(post.id);
-         //    })
-         //    .catch(function (err) {
-         //       console.log(err);
-         //    });
       }
    </script>
 </body>

@@ -53,6 +53,29 @@
          </div>
       </section>
       <div w3-include-html="footer.html"></div>
+      <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Voucher</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                  <input type="hidden" id="edit-id"> </input>
+                  <label>Nama Voucher : </label>
+                  <input class="form-control" type="text" id="edit-voucher_name"></input>
+                  <label>Value : </label>
+                  <input class="form-control" type="text" id="edit-value"></input>
+                  <label>Status : </label>
+                  <input class="form-control" type="text" id="edit-status"></input>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="updateVoucher()">Save changes</button>
+               </div>
+            </div>
+         </div>
+      </div>
    </main>
    <div w3-include-html="navdown.html"></div>
    <script src="/ui/jquery-3.6.1/jquery-3.6.1.min.js"></script>
@@ -86,8 +109,54 @@
          getvoucher();
       };
 
-      function getvoucher() {
-         
+      function editVoucher(data){
+         var id = data.id;
+         var voucher_name = data.voucher_name;
+         var value = data.value;
+         var status = data.status;
+         console.log(id,voucher_name,value,status);
+         document.getElementById("edit-id").value = id;
+         document.getElementById("edit-voucher_name").value =voucher_name;
+         document.getElementById("edit-value").value = value;
+         document.getElementById("edit-status").value = status;         
+      }
+
+      function updateVoucher(){
+         var id = document.getElementById("edit-id").value;
+         var voucher_name = document.getElementById("edit-voucher_name").value;
+         var value = document.getElementById("edit-value").value;
+         var status = document.getElementById("edit-status").value;
+         console.log(id,voucher_name,status);
+         axios({
+            method: 'post',
+            url: `http://127.0.0.1:8000/api/updatevoucher`,
+            data: {
+               id,voucher_name,status
+            }            
+         })
+         .then(response => {
+               console.log(response);
+               getvoucher();
+         })        
+      }
+
+      function deleteVoucher(id){
+         console.log(id);
+         axios({
+            method: 'delete',
+            url: `http://127.0.0.1:8000/api/delvoucher/${id}`,
+         })
+            .then(response => {
+               console.log(response);
+               getvoucher();
+               // document.getElementById("message").innerHTML = response.data.status;
+            })
+            .catch(function (err) {
+               console.log(err);
+            });  
+      }
+
+      function getvoucher() {         
          axios({
             method: 'get',
             url: `http://127.0.0.1:8000/api/getvoucher`,
@@ -97,10 +166,12 @@
                console.log(this.post);
                // console.log(response.data);
                console.log(response.data.length);
+               var no = 1;
                var text = "";
                text += "<table class='table table-bordered'>";
                text += "<tr>";
                text += "<th>No</th>";
+               text += "<th>Id Voucher</th>";
                text += "<th>Nama Voucher</th>";
                text += "<th>Value</th>";
                text += "<th>Status</th>";
@@ -109,11 +180,12 @@
                if (response.data.length > 0) {
                   for (var i = 0; i < response.data.length; i++) {
                      text += "<tr>";
+                     text += "<td>" + no++ + "</td>";
                      text += "<td>" + response.data[i].id+ "</td>";
                      text += "<td>" + response.data[i].voucher_name + "</td>";
                      text += "<td>" + response.data[i].value + "</td>";
                      text += "<td>" + response.data[i].status + "</td>";
-                     text += '<td><button class="btn btn-info btn-edit" data='+response.data[i].id+' data-toggle="modal" data-target="#Modaledit">edit</button> <button class="btn btn-danger btn-hapus" onclick="delproduct()" data='+response.data[i].id+'>hapus</button></td>';
+                     text += "<td><button data-bs-toggle='modal' data-bs-target='#editmodal' onclick='editVoucher("+JSON.stringify(response.data[i])+")' class='btn btn-info btn-edit'>Edit</button>  <a button type='submit' class='btn btn-danger btn-hapus' onclick='deleteVoucher("+response.data[i].id+")'>Delete</button></td>";
                      text += "</tr>";
                   }
                }
@@ -123,20 +195,6 @@
             .catch(function (err) {
                console.log(err);
             });
-      }
-      function delproduct(post, i) {            
-         console.log(post.id);
-         // axios({
-         //    method: 'delete',
-         //    url: `http://127.0.0.1:8000/api/delproduct`,
-         // })
-         //    .then(response => {
-         //       console.log(post);        
-         //       console.log(post.id);
-         //    })
-         //    .catch(function (err) {
-         //       console.log(err);
-         //    });
       }
    </script>
 </body>
